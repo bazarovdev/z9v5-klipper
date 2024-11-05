@@ -70,3 +70,43 @@ Nov 02 02:45:18 pc-name snapd[2187845]: hotplug.go:200: hotplug device add event
 Nov 02 02:45:18 pc-name mtp-probe[732048]: checking bus 1, device 77: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-8"
 Nov 02 02:45:18 pc-name mtp-probe[732048]: bus: 1, device: 77 was not an MTP device
 ```
+
+## Changes from original:
+1. Z-sensor wasn't mapped so added:
+    ```
+    [probe]
+    pin: !PB13
+    ...
+    ```
+2. Fixed bed dimensions
+    * due to wiring Y axis getting stuck into motor connector and so Y movement limited by 300mm (bed is 310mm)
+    * screw locations also fixed and added delta of z-sensor position (for some reason it doesn't get compensated automatically)
+3. Calibrated `rotation_distance` for all 4 extruders
+
+## Heaters PID calibrations
+To calibrate both PID loops of heaters used:
+```
+    PID_CALIBRATE HEATER=extruder TARGET=200
+    SAVE_CONFIG
+    restart
+    PID_CALIBRATE HEATER=heater_bed TARGET=60
+    SAVE_CONFIG
+    restart
+```
+results:
+![graphs of temperatures](/resources/heaters_calib.png)
+
+## Bed Mesh
+Created initial bed mesh before fixing anything using GUI `HEIGHTMAP` clicking `CALIBRATE` and then running `SAVE_CONFIG` in console
+result:
+![initial bed mesh](/resources/initial_bed.png)
+
+After that used
+```
+SCREWS_TILT_CALCULATE
+```
+to adjust screws and bring all corner to the same plane, and running mesh again:
+![final result](/resources/final_bed.png)
+
+Interestingly, I added plastic rectangle below PEI flexible top and the mesh didn't change, then added metallic ruler and the sensor was triggered even before going down. It means, that the sensor measures metal plate/magnetic sticker and not real bed position. Hopefully, switching to steel PEI plate will solve the issue. 
+Another option is to switch to BLTouch sensor that uses mechanical contact instead of inductive proximity sensor.
