@@ -110,3 +110,26 @@ to adjust screws and bring all corner to the same plane, and running mesh again:
 
 Interestingly, I added plastic rectangle below PEI flexible top and the mesh didn't change, then added metallic ruler and the sensor was triggered even before going down. It means, that the sensor measures metal plate/magnetic sticker and not real bed position. Hopefully, switching to steel PEI plate will solve the issue. 
 Another option is to switch to BLTouch sensor that uses mechanical contact instead of inductive proximity sensor.
+
+## Extrusion speed
+Repeating experiment from this video:
+https://www.youtube.com/watch?v=0xRtypDjNvI
+![extrusion of 300mm at various speeds](/resources/extrusion_300mm.png)
+
+|F [mm/min] | E300mm [gr]|
+|---|---|
+|100|0.82|
+|200|0.81|
+|250|0.79|
+|300|0.74|
+|300|0.71|
+|400|0.63|
+|500|0.5|
+
+![Graph of weight vs speed](/resources/extrusion_weight_graph.png)
+
+So it seems that printing above `F200` starts extrude less material
+`200mm/min` of `1.75mm` filament is equal `8.0176 mm^3/s`
+```
+200/60*(1.75/2)^2*pi = 8.0176 mm^3/s
+```
