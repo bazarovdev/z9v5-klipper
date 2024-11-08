@@ -128,8 +128,21 @@ https://www.youtube.com/watch?v=0xRtypDjNvI
 
 ![Graph of weight vs speed](/resources/extrusion_weight_graph.png)
 
-So it seems that printing above `F200` starts extrude less material
-`200mm/min` of `1.75mm` filament is equal `8.0176 mm^3/s`
+So it seems that printing above `F200` starts extrude less material.
+
+The `200mm/min` of `1.75mm` filament is equal `8.0176 mm^3/s`
 ```
 200/60*(1.75/2)^2*pi = 8.0176 mm^3/s
+```
+
+Later tried to increase tension between gears and filament using adjustment screw and the results:
+
+|F [mm/min] | E300mm [gr]|
+|---|---|
+|300|0.79|
+|400|0.70|
+
+So `300mm/min` seems ok:
+```
+300/60*(1.75/2)^2*pi = 12.026 mm^3/s
 ```
