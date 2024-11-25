@@ -146,3 +146,35 @@ So `300mm/min` seems ok:
 ```
 300/60*(1.75/2)^2*pi = 12.026 mm^3/s
 ```
+
+
+## Trying to configure Orca Slicer
+
+1. From adding comments to all G-Code macros in Printer/Filament settings, slicing and inspecting file, tried to understand execution order:
+    1. Machine Start Macro
+    1. Change Filament Macro (from `Printer settings`)
+    1. `T1` - tool activation G-code command
+    1. Filament_1 Start Macro (from `Filament settings`)
+    1. Before Layer Change Macro
+    1. Time Lapse Macro
+    1. Layer Change Macro
+    1. Change Extrusion Role Macro (Type: Inner wall)
+    1. Change Extrusion Role Macro (Type: Outer wall)
+    1. Change Extrusion Role Macro (Type: Bottom surface)
+    1. Filament_1 End Macro (from `Filament settings`)
+    1. Change Filament Macro (from `Printer settings`)
+    1. `T0` - tool activation G-code command
+    1. Filament_0 Start Macro (from `Filament settings`)
+    1. Change Extrusion Role Macro (Type: Inner wall)
+    1. Change Extrusion Role Macro (Type: Outer wall)
+    1. Change Extrusion Role Macro (Type: Bottom surface)
+    1. Filament_0 End Macro (from `Filament settings`)
+    1. Change Filament Macro (from `Printer settings`)
+    1. `T2` - tool activation G-code command
+        
+        ...
+    2. Filament_0 End Macro (from `Filament settings`)
+        
+        ... per filament
+    3. Filament_3 End Macro (from `Filament settings`)
+    4. Machine_end
