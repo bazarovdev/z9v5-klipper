@@ -178,3 +178,48 @@ So `300mm/min` seems ok:
         ... per filament
     3. Filament_3 End Macro (from `Filament settings`)
     4. Machine_end
+
+    ... to be continued
+
+## Pressure Advance (PA) calibrations
+
+Uses to start pushing fillament a little before starting printing and stopping extruding a little earlier, to compensate for long Bowden tubing that connects extruder and printing head and gives slack for filament to move and compress like spring inside tubing.
+
+Using Orca slicer's `Calibrations` menu created PA pattern for Bowden printers:
+![PA calibration pattern](/resources/PA_calibration.jpeg)
+
+Looking at the corners, at 0.6 it looks sharp and the under-extrusion just starts.
+
+The value was put into config and into slicer settings.
+```
+[extruder]
+...
+pressure_advance = 0.6
+...
+```
+
+After configuring this I started to get Klipper errors of `MCU 'mcu' shutdown: Stepper too far in past`. Few evening past, I understood that it happens at short intervals and interplays between feed rate (`F`) and `PA` values. Still, didn't solve it completely. 
+
+## Input Shaper
+
+Used to modify frequency of pulses provided to motors to avoid generating oscillations due to mechanical resonances in printer construction.
+
+Calibrated accordingly to [Klipper manual](https://www.klipper3d.org/Resonance_Compensation.html)
+
+My initial prints and comparison of 2 methods `EI` and `MZV`. Haven't learned them yet, but sticked to recommendation to use `MZV` as less smoothing.
+
+3 prints:
+ - `-` - no input shaping, starting accel=1000, step 500
+ - `MZV` - starting accel=500, step 1000
+ - `EI` - starting accel=500, step 1000
+
+X axis:
+
+![Input shaping X axis](/resources/input_shaper_x.jpeg)
+
+Y axis:
+
+![Input shaping Y axis](/resources/input_shaper_y.jpeg)
+
+Initial input shaper print failed because vibrations and probably bad cleaning of printer head before print. Solved by enabling `skirt` in slicer and so few loops of filament are extruded around model and so all leakages are wiped off before starting.
+    
